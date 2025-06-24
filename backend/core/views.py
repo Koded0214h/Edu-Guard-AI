@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.views import APIView
 
 from .models import Report, AdminNote, AIClassificationLog
 
@@ -20,20 +21,21 @@ class ReportListCreateView(generics.ListCreateAPIView):
         message = serializer.validated_data['message']
 
         # Text AI Tasks
-        category, reason = classify_text_with_gemini(message)
+        category, reason, location, confidence = classify_text_with_gemini(message)
         keywords = extract_keywords(message)
         summary = summarize_text(message)
 
-        # Save basic report first
         report = serializer.save(
             reporter=self.request.user,
             category=category,
-            confidence=None,
+            classification_reason=reason,
+            confidence=confidence,
+            location_name=location,
             highlighted_keywords=keywords,
             short_summary=summary,
         )
 
-        # Image AI Tasks (if image is uploaded)
+        # Handle image
         image = self.request.FILES.get("image")
         if image:
             img_category, img_reason = classify_image_with_gemini(image)
@@ -42,14 +44,16 @@ class ReportListCreateView(generics.ListCreateAPIView):
             report.image_reason = img_reason
             report.save(update_fields=["image", "image_category", "image_reason"])
 
-        # Log AI action
+        # Log AI
         AIClassificationLog.objects.create(
             report=report,
             input_text=message,
             predicted_category=category,
-            confidence=None,
+            classification_reason=reason,
+            confidence=confidence,
             model_version="gemini-2.0-flash"
         )
+
 
 
 
@@ -75,3 +79,18 @@ class AIClassificationLogListView(generics.ListAPIView):
     queryset = AIClassificationLog.objects.all().order_by('-timestamp')
     serializer_class = AIClassificationLogSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class ScamKnowledgeView(APIView):
+    def get(self, request, category):
+        knowledge_base = {
+            "Fake Scholarship": "Fake scholarships often promise money but request payment or sensitive info. Always verify from official sites.",
+            "Forged Result": "These documents may have layout issues, wrong fonts, or grammatical errors.",
+            "Uncertain": "If you're unsure, cross-check with the issuing institution or contact EduGuard support.",
+            # Add more categories
+        }
+
+        return Response({
+            "category": category,
+            "tip": knowledge_base.get(category, "No tip available for this category yet.")
+        })
