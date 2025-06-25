@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)&5p7j8#5j+8q$e@gsg6bcl-juprpp8#c_bysw36j2p-6eg9)@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://edu-guard-ai-backend.onrender.com/', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['edu-guard-ai-backend.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
