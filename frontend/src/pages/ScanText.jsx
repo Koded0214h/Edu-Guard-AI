@@ -1,43 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { FaSearch, FaUserCircle, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
+import { FaSearch, FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 import { MdContentPaste, MdClear } from "react-icons/md";
+import api from "../api";
+import ScanResultCard from "../components/ScanResultCard";
 
 const ScanText = () => {
   const [inputText, setInputText] = useState("");
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [scamPhrases] = useState([
     "congratulations", "you have won", "click here", "urgent", 
     "claim your prize", "payment required", "limited time",
     "account verification", "bank details", "password reset",
     "free money", "lottery winner", "scholarship fee"
   ]);
+  const [username, setUsername] = useState("");
 
-  const handleScan = () => {
+  useEffect(() => {
+    setUsername(localStorage.getItem("username") || "User");
+  }, []);
+
+  const handleScan = async () => {
     if (!inputText.trim()) {
       alert("Please paste a message to scan.");
       return;
     }
-
     setIsLoading(true);
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      const lower = inputText.toLowerCase();
-      const flagged = scamPhrases.filter(phrase => lower.includes(phrase));
-      const isScam = flagged.length > 0;
-
-      setResult({
-        scam: isScam,
-        flaggedPhrases: flagged,
-        message: isScam
-          ? `This message contains ${flagged.length} red flag${flagged.length > 1 ? 's' : ''}.`
-          : "No scam signals found.",
-        confidence: isScam ? Math.min(90 + (flagged.length * 5), 100) : Math.floor(Math.random() * 30)
-      });
+    setError("");
+    setResult(null);
+    try {
+      const payload = {
+        message: inputText,
+        reporter_type: "anonymous"
+      };
+      const res = await api.post("/reports/", payload);
+      setResult(res.data);
+    } catch (err) {
+      setError(
+        err.response?.data?.detail || err.response?.data?.error || "Scan failed"
+      );
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handlePaste = async () => {
@@ -52,6 +58,7 @@ const ScanText = () => {
   const clearInput = () => {
     setInputText("");
     setResult(null);
+    setError("");
   };
 
   return (
@@ -72,8 +79,7 @@ const ScanText = () => {
             </p>
           </div>
           <div className="flex items-center mt-4 md:mt-0">
-            <FaUserCircle className="text-gray-400 text-3xl md:text-4xl" />
-            <span className="font-medium text-gray-700 ml-3">Hello, Divine</span>
+            <span className="font-medium text-gray-700 ml-3">Hello, {username}</span>
           </div>
         </div>
 
@@ -128,87 +134,12 @@ const ScanText = () => {
               )}
             </button>
           </div>
+          {error && <div style={{ color: 'red', marginTop: 12 }}>{error}</div>}
         </div>
 
         {/* Results Section */}
         {result && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Scan Results</h2>
-            
-            <div className={`p-5 rounded-lg mb-6 ${
-              result.scam 
-                ? 'bg-red-50 border-l-4 border-red-500' 
-                : 'bg-green-50 border-l-4 border-green-500'
-            }`}>
-              <div className="flex items-start">
-                {result.scam ? (
-                  <FaExclamationTriangle className="text-red-500 text-2xl mt-1 mr-3 flex-shrink-0" />
-                ) : (
-                  <FaCheckCircle className="text-green-500 text-2xl mt-1 mr-3 flex-shrink-0" />
-                )}
-                <div>
-                  <h3 className={`font-bold ${
-                    result.scam ? 'text-red-700' : 'text-green-700'
-                  }`}>
-                    {result.scam ? "Potential Scam Detected" : "No Scam Patterns Found"}
-                  </h3>
-                  <p className="text-gray-700 mt-1">{result.message}</p>
-                  
-                  {result.scam && (
-                    <div className="mt-3">
-                      <h4 className="text-sm font-medium text-gray-700 mb-1">
-                        Detected red flags:
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {result.flaggedPhrases.map((phrase, index) => (
-                          <span key={index} className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
-                            {phrase}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="mt-4">
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div 
-                        className={`h-2.5 rounded-full ${
-                          result.scam ? 'bg-red-500' : 'bg-green-500'
-                        }`} 
-                        style={{ width: `${result.confidence}%` }}
-                      ></div>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Confidence: {result.confidence}%
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="font-medium text-gray-700 mb-2">
-                {result.scam ? "Recommended Actions" : "Safety Tips"}
-              </h4>
-              <ul className="list-disc pl-5 text-gray-600 space-y-1">
-                {result.scam ? (
-                  <>
-                    <li>Do not click any links in the message</li>
-                    <li>Never share personal or financial information</li>
-                    <li>Verify with the official institution directly</li>
-                    <li>Report this message to authorities if suspicious</li>
-                  </>
-                ) : (
-                  <>
-                    <li>Still verify with official sources before acting</li>
-                    <li>Be cautious of requests for payments or personal info</li>
-                    <li>Check sender email addresses carefully</li>
-                    <li>When in doubt, contact the institution directly</li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
+          <ScanResultCard report={result} />
         )}
       </main>
     </div>

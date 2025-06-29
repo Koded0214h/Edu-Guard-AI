@@ -18,6 +18,7 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [username, setUsername] = useState("");
 
   // Check screen size and handle dark mode
   useEffect(() => {
@@ -33,7 +34,10 @@ export default function Sidebar() {
     // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) setDarkMode(savedTheme === 'dark');
-    
+
+    // Get username from localStorage
+    setUsername(localStorage.getItem('username') || "User");
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -76,8 +80,8 @@ export default function Sidebar() {
     {
       icon: <LuTriangleAlert className="text-lg" />,
       label: "Support",
-      path: "/report",
-      active: location.pathname === '/report'
+      path: "/support",
+      active: location.pathname === '/support'
     }
   ];
 
@@ -122,6 +126,12 @@ export default function Sidebar() {
           onClick={() => handleNavigation('/dashboard')}
         >
           <h1 className="font-bold text-xl text-gray-800 dark:text-white">EduGuard AI</h1>
+        </div>
+
+        {/* Dynamic Greeting */}
+        <div className="px-6 pb-2">
+          <span className="block text-sm text-gray-500 dark:text-gray-400">Hello,</span>
+          <span className="block font-bold text-lg text-gray-800 dark:text-white truncate">{username}</span>
         </div>
 
         {/* Navigation Links */}
