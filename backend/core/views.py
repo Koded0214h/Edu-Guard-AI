@@ -57,6 +57,9 @@ class ReportListCreateView(generics.ListCreateAPIView):
     serializer_class = ReportSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        return Report.objects.filter(reporter=self.request.user).order_by('-timestamp')
+
     def perform_create(self, serializer):
         message = serializer.validated_data['message']
 
