@@ -94,7 +94,7 @@ export default function Sidebar() {
       {/* Mobile Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className={`fixed z-40 top-4 left-4 p-2 rounded-md bg-green-500 text-white shadow-lg transition-all
+        className={`fixed z-40 top-[5px] left-96 p-2 rounded-md bg-green-500 text-white shadow-lg transition-all 
           ${isOpen ? 'ml-64' : ''} md:hidden`}
         aria-label="Toggle sidebar"
       >

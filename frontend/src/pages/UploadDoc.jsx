@@ -64,7 +64,9 @@ const UploadDoc = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">DOCUMENT CHECKER</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-3">
+              <FiUpload className="text-green-500 font-bold"/>
+              DOCUMENT CHECKER</h1>
             <p className="text-gray-600 mt-2">
               Upload and verify the authenticity of any scholarship or academic documents.
             </p>
