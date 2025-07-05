@@ -171,8 +171,9 @@ const Report = ({ userName = "Divine" }) => {
           </button>
         </form>
       </main>
+
     </div>
   );
-};
+}
 
 export default Report;

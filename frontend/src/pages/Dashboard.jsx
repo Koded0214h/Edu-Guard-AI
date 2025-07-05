@@ -46,23 +46,24 @@ const Dashboard = () => {
     }
   ];
 
+  // console.log("Dashboard mounted");
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row pt-5">
       <Sidebar />
       <div className="hidden md:block w-px bg-gray-200"></div>
 
-      <main className="flex-1 p-4 sm:p-6 md:p-8">
-        {/* Top Header */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <main className="flex-1 p-6 md:p-8">
+        {/* Top header */}
+        <header className="flex flex-col md:flex-row justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-1 leading-snug">
-              Your Academic <br />
-              <span className="text-green-500">Bodyguard</span> Against Scams
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Your Academic<br /><span className='text-green-500'>Bodyguard </span>Against Scams
             </h1>
             <p className="text-gray-600">Detect fake offers with AI</p>
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center mt-4 md:mt-0">
             <img
               alt="profile"
               src="/img/person.webp"
@@ -72,21 +73,21 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Feature cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 h-64">
           {features.map((card, i) => (
             <div
               key={i}
-              className={`${card.bg} border rounded-xl p-5 hover:shadow-lg transition duration-200 flex flex-col justify-between`}
+              className={`${card.bg} border rounded-xl p-5 hover:shadow-lg transition duration-200`}
             >
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-4 pt-8">
                 {card.icon}
                 <h3 className="text-lg font-bold text-gray-800">{card.title}</h3>
               </div>
-              <p className="text-sm text-gray-600 mb-6">{card.desc}</p>
+              <p className="text-sm text-gray-600 mb-4">{card.desc}</p>
               <button
                 onClick={card.action}
-                className="mt-auto w-full bg-green-500 hover:bg-green-600 text-white py-2 text-sm rounded"
+                className="w-full bg-green-500 hover:bg-green-600 text-white py-2 text-sm rounded"
               >
                 {card.btn}
               </button>
@@ -94,10 +95,10 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Stats Section */}
-        <section className="mt-12 bg-white rounded-xl p-6 shadow-sm">
+        {/* TODO: Fetch stats from backend */}
+        <section className="mt-12 bg-white rounded-xl p-6 shadow">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Stats Overview</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div className="bg-green-50 p-4 rounded">
               <p className="text-gray-600 text-sm">Scans Completed</p>
               <h3 className="text-2xl font-bold text-green-600">24</h3>

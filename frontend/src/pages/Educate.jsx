@@ -101,5 +101,4 @@ function Educate({ userName = "Divine" }) {
     </div>
   );
 }
-
 export default Educate;

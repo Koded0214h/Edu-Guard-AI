@@ -22,12 +22,19 @@ import LoginPage from "./pages/LoginPage"
 import LandingPage from "./pages/LandingPage"
 import LoginForm from "./components/LoginForm"
 import SignupForm from "./components/SignupForm"
-// Import others here...
+import Landing from "./pages/Landing"
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Support from "./pages/Support";
+import ReportScam from "./pages/ReportScam";// Import others here...
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/a" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/scan-text" element={<ScanText />}/>
         <Route path="/educate" element={<Educate />}/>
@@ -36,6 +43,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         
+        <Route path="/support" element={<Support />} />
+        <Route path="/report-scam" element={<ReportScam />} />
         {/* Add others as you go */}
       </Routes>
     </Router>
