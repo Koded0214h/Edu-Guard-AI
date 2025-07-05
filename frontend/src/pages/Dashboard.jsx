@@ -1,120 +1,165 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from "../components/Sidebar";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { LuTriangleAlert } from "react-icons/lu";
 import { IoMdBook } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-// import { BsBell } from 'react-icons/bs'; // might use later for notifications
+import api from '../api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
 
-  // Card info (can be made dynamic from backend later)
-  const features = [
+  useEffect(() => {
+    api.get("/reports/")
+      .then(res => {
+        setReports(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError("Failed to load reports");
+        setLoading(false);
+      });
+    setUsername(localStorage.getItem("username") || "User");
+  }, []);
+
+  const featureCards = [
     {
-      icon: <FaMagnifyingGlass className="text-green-500 text-3xl" />,
+      icon: <FaMagnifyingGlass className="text-green-500 text-3xl md:text-4xl" />,
       title: "Quick Scam Check",
-      desc: "Paste suspicious text to scan",
-      btn: "Scan Now",
+      description: "Paste suspicious text to scan",
+      buttonText: "Scan Now",
       action: () => navigate('/scan-text'),
-      bg: "bg-green-50"
+      bgColor: "bg-green-50"
     },
     {
-      icon: <IoCloudUploadOutline className="text-green-500 text-3xl" />,
+      icon: <IoCloudUploadOutline className="text-green-500 text-3xl md:text-4xl" />,
       title: "Upload Document",
-      desc: "Upload files like PDF, DOCX, etc.",
-      btn: "Upload Document",
+      description: "Upload Files Docx, PDF, JPG, etc.",
+      buttonText: "Upload Document",
       action: () => navigate('/upload-doc'),
-      bg: "bg-blue-50"
+      bgColor: "bg-blue-50"
     },
     {
-      icon: <IoMdBook className="text-green-500 text-3xl" />,
+      icon: <IoMdBook className="text-green-500 text-3xl md:text-4xl" />,
       title: "Scam Education",
-      desc: "Tips to avoid scholarship scams",
-      btn: "Learn Now",
+      description: "Learn how to avoid scams and risks",
+      buttonText: "Learn Now",
       action: () => navigate('/educate'),
-      bg: "bg-purple-50"
+      bgColor: "bg-purple-50"
     },
     {
-      icon: <LuTriangleAlert className="text-green-500 text-3xl" />,
+      icon: <LuTriangleAlert className="text-green-500 text-3xl md:text-4xl" />,
       title: "Report Scam",
-      desc: "Suspicious message? Let us know",
-      btn: "Report Activity",
-      action: () => navigate('/report'),
-      bg: "bg-red-50"
+      description: "Report suspicious scholarship offers",
+      buttonText: "Report Activity",
+      action: () => navigate('/report-scam'),
+      bgColor: "bg-red-50"
     }
   ];
 
-  // console.log("Dashboard mounted");
+  // Compute stats from reports
+  const scansCompleted = reports.length;
+  const potentialScams = reports.filter(r => r.scam === true).length;
+  const documentsChecked = reports.filter(r => r.type === "document").length;
+  const scamsReported = reports.filter(r => (r.category || "").toLowerCase().includes("scam")).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row pt-5">
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
       <Sidebar />
       <div className="hidden md:block w-px bg-gray-200"></div>
 
-      <main className="flex-1 p-6 md:p-8">
-        {/* Top header */}
-        <header className="flex flex-col md:flex-row justify-between mb-8">
+      <main className="flex-1 p-4 md:p-8 max-w-6xl mx-auto w-full">
+        {/* Header Section */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Your Academic<br /><span className='text-green-500'>Bodyguard </span>Against Scams
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 font-poppins leading-tight mb-2">
+              Your Academic <span className="text-green-600">Bodyguard</span> <br className="hidden md:block" />
+              Against Scams
             </h1>
-            <p className="text-gray-600">Detect fake offers with AI</p>
+            <p className="text-gray-600 mt-2 text-base md:text-lg">
+              Detect and avoid scholarship scams, fake offers and forged documents with AI.
+            </p>
           </div>
-
-          <div className="flex items-center mt-4 md:mt-0">
-            <img
-              alt="profile"
-              src="/img/person.webp"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <span className="ml-3 font-semibold text-gray-700">Hey Divine 👋</span>
+          <div className="flex items-center gap-3 bg-white rounded-lg shadow px-4 py-2">
+            <div className="flex flex-col">
+              <span className="font-bold text-lg text-gray-800">Hello, {username}</span>
+              <span className="text-xs text-gray-500">Welcome back!</span>
+            </div>
           </div>
         </header>
 
-        {/* Feature cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 h-64">
-          {features.map((card, i) => (
-            <div
-              key={i}
-              className={`${card.bg} border rounded-xl p-5 hover:shadow-lg transition duration-200`}
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {featureCards.map((card, index) => (
+            <div 
+              key={index}
+              className={`${card.bgColor} border border-gray-200 rounded-2xl p-6 shadow hover:shadow-lg transition-shadow flex flex-col items-start h-full`}
             >
-              <div className="flex items-center gap-3 mb-4 pt-8">
+              <div className="flex items-center space-x-4 mb-4">
                 {card.icon}
-                <h3 className="text-lg font-bold text-gray-800">{card.title}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                  {card.title}
+                </h3>
               </div>
-              <p className="text-sm text-gray-600 mb-4">{card.desc}</p>
+              <p className="text-gray-500 mb-6 text-sm flex-1">{card.description}</p>
               <button
                 onClick={card.action}
-                className="w-full bg-green-500 hover:bg-green-600 text-white py-2 text-sm rounded"
+                className="w-full py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors mt-auto"
               >
-                {card.btn}
+                {card.buttonText}
               </button>
             </div>
           ))}
         </div>
 
-        {/* TODO: Fetch stats from backend */}
-        <section className="mt-12 bg-white rounded-xl p-6 shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Stats Overview</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="bg-green-50 p-4 rounded">
-              <p className="text-gray-600 text-sm">Scans Completed</p>
-              <h3 className="text-2xl font-bold text-green-600">24</h3>
-            </div>
-            <div className="bg-blue-50 p-4 rounded">
-              <p className="text-gray-600 text-sm">Potential Scams</p>
-              <h3 className="text-2xl font-bold text-blue-600">3</h3>
-            </div>
-            <div className="bg-purple-50 p-4 rounded">
-              <p className="text-gray-600 text-sm">Docs Checked</p>
-              <h3 className="text-2xl font-bold text-purple-600">15</h3>
-            </div>
-            <div className="bg-red-50 p-4 rounded">
-              <p className="text-gray-600 text-sm">Reports Filed</p>
-              <h3 className="text-2xl font-bold text-red-600">2</h3>
-            </div>
+        {/* Dynamic Reports Section */}
+        <section className="bg-white rounded-2xl shadow p-6 mb-12">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Reports</h2>
+          {loading && <div>Loading reports...</div>}
+          {error && <div className="text-red-500">{error}</div>}
+          {!loading && !error && (
+            reports.length > 0 ? (
+              <ul className="divide-y divide-gray-100">
+                {reports.map((report) => (
+                  <li key={report.id} className="py-3 flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <span className="font-semibold text-green-700 mr-2">{report.category || 'Uncategorized'}</span>
+                      <span className="text-gray-700">{report.message}</span>
+                    </div>
+                    <span className="text-xs text-gray-400 mt-2 md:mt-0">{new Date(report.timestamp).toLocaleString()}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="w-full bg-gray-100 border-2 border-dashed border-green-300 rounded-xl flex items-center justify-center py-12 my-4">
+                <span className="text-gray-500 text-lg font-semibold">Start by making a report</span>
+              </div>
+            )
+          )}
+        </section>
+
+        {/* Stats Section */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="bg-green-50 p-6 rounded-2xl flex flex-col items-center shadow">
+            <p className="text-gray-500 mb-1">Scans Completed</p>
+            <p className="text-2xl font-bold text-green-600">{scansCompleted}</p>
+          </div>
+          <div className="bg-blue-50 p-6 rounded-2xl flex flex-col items-center shadow">
+            <p className="text-gray-500 mb-1">Potential Scams</p>
+            <p className="text-2xl font-bold text-blue-600">{potentialScams}</p>
+          </div>
+          <div className="bg-purple-50 p-6 rounded-2xl flex flex-col items-center shadow">
+            <p className="text-gray-500 mb-1">Documents Checked</p>
+            <p className="text-2xl font-bold text-purple-600">{documentsChecked}</p>
+          </div>
+          <div className="bg-red-50 p-6 rounded-2xl flex flex-col items-center shadow">
+            <p className="text-gray-500 mb-1">Scams Reported</p>
+            <p className="text-2xl font-bold text-red-600">{scamsReported}</p>
           </div>
         </section>
       </main>

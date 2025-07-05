@@ -33,7 +33,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/a" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/scan-text" element={<ScanText />}/>
