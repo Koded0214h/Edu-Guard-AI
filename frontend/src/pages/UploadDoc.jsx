@@ -72,6 +72,7 @@ const UploadDoc = () => {
           ...(token && { Authorization: `Token ${token}` }),
         },
       });
+      console.log("API Response:", res.data);
       setResult(res.data);
     } catch (err) {
       console.error("Upload error:", err.response?.data);

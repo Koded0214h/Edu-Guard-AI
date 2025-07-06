@@ -18,9 +18,9 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = '__all__'
         read_only_fields = [
-            'reporter', 'timestamp', 'category', 'confidence',
-            'image_reason', 'image_category'
+            'reporter', 'timestamp', 'category', 'confidence'
         ]
+
 class AdminNoteSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source='author.username', read_only=True)
 

@@ -102,12 +102,25 @@ class ReportListCreateView(generics.ListCreateAPIView):
 
         # Image AI Tasks
         image = self.request.FILES.get('image')
+        print(f"Image received: {image}")  # Debug log
         if image:
-            img_cat, img_reason = classify_image_with_gemini(image)
-            report.image = image
-            report.image_category = img_cat
-            report.image_reason = img_reason
-            report.save(update_fields=['image', 'image_category', 'image_reason'])
+            try:
+                print(f"Starting image analysis for: {image.name}")  # Debug log
+                img_cat, img_reason = classify_image_with_gemini(image)
+                report.image = image
+                report.image_category = img_cat
+                report.image_reason = img_reason
+                report.save(update_fields=['image', 'image_category', 'image_reason'])
+                print(f"Image analysis completed: {img_cat} - {img_reason}")
+            except Exception as e:
+                print(f"Image classification error: {e}")
+                # Still save the image even if analysis fails
+                report.image = image
+                report.image_category = "Error"
+                report.image_reason = f"Image analysis failed: {str(e)}"
+                report.save(update_fields=['image', 'image_category', 'image_reason'])
+        else:
+            print("No image received in request")  # Debug log
 
         # Log AI classification
         try:
