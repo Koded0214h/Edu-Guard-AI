@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 from .views import (
     ReportListCreateView, ReportDetailView,
     AdminNoteCreateView, AdminNoteListView,
-    AIClassificationLogListView,
+    AIClassificationLogListView, ScamKnowledgeView,
+    signup, login, user_stats
 )
 
 urlpatterns = [
@@ -14,6 +15,10 @@ urlpatterns = [
     path('notes/', AdminNoteListView.as_view(), name='note-list'),
     path('notes/create/', AdminNoteCreateView.as_view(), name='note-create'),
     path('ai/logs/', AIClassificationLogListView.as_view(), name='ai-log-list'),
+    path("scam-tactics/<str:category>/", ScamKnowledgeView.as_view()),
+    path('signup/', signup, name='signup'),
+    path('login/', login, name='login'),
+    path('stats/', user_stats, name='user-stats'),
 ]
 
 

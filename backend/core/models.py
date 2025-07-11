@@ -23,7 +23,7 @@ class Report(models.Model):
     classification_reason = models.TextField(blank=True, null=True)
     confidence = models.FloatField(null=True, blank=True)
     
-    highlighted_keywords = models.JSONField(blank=True, null=True, default=None)
+    highlighted_keywords = models.TextField(blank=True, null=True)
 
     image = models.ImageField(upload_to='report_images/', null=True, blank=True)
     image_category = models.CharField(max_length=100, blank=True, null=True)
@@ -31,6 +31,7 @@ class Report(models.Model):
 
     is_reviewed = models.BooleanField(default=False)
     action_taken = models.TextField(blank=True, null=True)
+    location_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Report {self.id} - {self.category or 'Uncategorized'}"
