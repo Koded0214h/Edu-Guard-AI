@@ -1,13 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + "/api",
+  baseURL: import.meta.env.VITE_API_URL + "api",  // ✅ No extra slash
 });
 
-// Add a request interceptor to include the token
 api.interceptors.request.use(
   (config) => {
-    // Do not add token for login or signup
     if (
       config.url.endsWith("/login/") ||
       config.url.endsWith("/signup/")
@@ -23,4 +21,4 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default api; 
+export default api;
