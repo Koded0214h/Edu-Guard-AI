@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IoIosMenu } from "react-icons/io";
 import { IoExitOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,8 +42,11 @@ export const Header = () => {
           >
             FAQ
           </a>
-          <button  className="bg-[#1A2A3A] hover:bg-[#334455] text-white px-6 py-2 rounded-md font-medium transition-colors">
-           <a href="/login"> Get Started    </a>      </button>
+          <Link to="/login">
+            <button className="bg-[#1A2A3A] hover:bg-[#334455] text-white px-6 py-2 rounded-md font-medium transition-colors">
+              Get Started
+            </button>
+          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
