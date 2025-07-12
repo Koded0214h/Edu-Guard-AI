@@ -1,6 +1,7 @@
 import React from 'react';
 import { LuShieldCheck } from "react-icons/lu";
 import { FiAlertTriangle } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 export default function HeroSection() {
   return (
@@ -22,9 +23,11 @@ export default function HeroSection() {
               verification technology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Link to='/login'>
               <button className="bg-[#1A2A3A] hover:bg-[#334455] text-white px-8 py-3 rounded-md font-medium text-lg transition-colors">
-                <a href="/login">Start Fact-Checking</a>
+                Start Fact-Checking
               </button>
+              </Link>
               <button className="bg-white hover:bg-[#E5E7EB] text-[#1A2A3A] border border-[#1A2A3A] px-8 py-3 rounded-md font-medium text-lg transition-colors">
                <a href="#how-it-works"> Learn More </a>
               </button>
