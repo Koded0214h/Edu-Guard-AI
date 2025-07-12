@@ -27,6 +27,8 @@ export default function DocumentChecker() {
     { label: "Anonymous", value: "anonymous" },
   ]);
 
+  const isFormValid = value && message.trim().length > 0;
+
   const [fileInfo, setFileInfo] =
     useState<DocumentPicker.DocumentPickerAsset | null>(null);
 
@@ -57,20 +59,18 @@ export default function DocumentChecker() {
         mimeType: asset.mimeType || undefined,
         size: asset.size || 0,
         name: asset.name || asset.uri.split("/").pop() || "image",
-        // Optionally add 'lastModified' if needed
       });
     }
   };
 
   const openGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only allow images
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      // Only accept jpg, jpeg, png
       const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
       const mimeType = asset.mimeType || asset.type || "";
       if (allowedTypes.includes(mimeType)) {
@@ -103,7 +103,6 @@ export default function DocumentChecker() {
           mimeType: asset.mimeType || asset.type || undefined,
           size: asset.fileSize || 0,
           name: asset.fileName || asset.uri.split("/").pop() || "image",
-          // Optionally add 'lastModified' if needed
         });
       }
     } else {
@@ -186,6 +185,7 @@ export default function DocumentChecker() {
                   style={{
                     borderColor: "#D1D5DB",
                   }}
+                  listMode="SCROLLVIEW"
                 />
               </View>
 
@@ -333,18 +333,19 @@ export default function DocumentChecker() {
               <View style={{ width: "100%", alignItems: "flex-end" }}>
                 <TouchableOpacity
                   style={{
-                    backgroundColor: fileInfo ? "#16A34A" : "#d1d5db",
+                    backgroundColor: isFormValid ? "#16A34A" : "#d1d5db",
                     paddingHorizontal: 20,
                     paddingVertical: 10,
                     borderRadius: 10,
                     marginTop: 20,
                   }}
+                  disabled={!isFormValid}
                 >
                   <Text
                     style={{
                       fontSize: 17,
                       fontWeight: 500,
-                      color: fileInfo ? "#fff" : "#6b7280",
+                      color: isFormValid ? "#fff" : "#6b7280",
                     }}
                   >
                     Analyze Document

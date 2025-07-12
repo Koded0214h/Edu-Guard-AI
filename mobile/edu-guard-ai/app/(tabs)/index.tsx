@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,6 +13,24 @@ import { useRouter } from "expo-router";
 export default function Index() {
   const user = { name: "Valentine" }; // replace with actual user state
   const router = useRouter();
+
+  const logOut = () => {
+    Alert.alert(
+      "Log out",
+      "Do you want to log out?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Log Out",
+          style: "destructive",
+          onPress: () => {
+            router.replace("/(auth)/onboarding");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
@@ -25,6 +44,19 @@ export default function Index() {
           paddingBottom: 40,
         }}
       >
+        {/* Header */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: 700 }}>EduGuard AI</Text>
+          <TouchableOpacity onPress={logOut}>
+            <Ionicons name="log-out-outline" size={28} color={"#f00"} />
+          </TouchableOpacity>
+        </View>
         <View>
           <Text
             style={{
@@ -184,7 +216,7 @@ export default function Index() {
                 marginBottom: 10,
               }}
             >
-              <Ionicons name="search-sharp" size={30} color={"#16a34a"} />
+              <Ionicons name="book-outline" size={30} color={"#16a34a"} />
               <Text style={{ fontSize: 20, fontWeight: 600 }}>
                 Scam Education
               </Text>
@@ -201,6 +233,7 @@ export default function Index() {
                 borderRadius: 10,
                 marginTop: 20,
               }}
+              onPress={() => router.push("/ScamEducation")}
             >
               <Text
                 style={{
@@ -234,7 +267,7 @@ export default function Index() {
                 marginBottom: 10,
               }}
             >
-              <Ionicons name="search-sharp" size={30} color={"#16a34a"} />
+              <Ionicons name="warning-outline" size={30} color={"#16a34a"} />
               <Text style={{ fontSize: 20, fontWeight: 600 }}>Report Scam</Text>
             </View>
             <View>
@@ -249,6 +282,7 @@ export default function Index() {
                 borderRadius: 10,
                 marginTop: 20,
               }}
+              onPress={() => router.push("/ReportScam")}
             >
               <Text
                 style={{
@@ -258,7 +292,7 @@ export default function Index() {
                   textAlign: "center",
                 }}
               >
-                Scan Now
+                Report Activity
               </Text>
             </TouchableOpacity>
           </View>

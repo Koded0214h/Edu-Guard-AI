@@ -163,6 +163,7 @@ export default function TextScanner() {
                     borderRadius: 10,
                     marginTop: 20,
                   }}
+                  disabled={!message}
                 >
                   <Text
                     style={{
