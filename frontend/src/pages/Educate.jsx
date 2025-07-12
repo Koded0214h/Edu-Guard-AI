@@ -6,6 +6,7 @@ import { PiBagFill } from "react-icons/pi";
 import { IoDocumentOutline } from "react-icons/io5";
 import { CiReceipt } from "react-icons/ci";
 import { IoMdPerson } from "react-icons/io";
+import { useState, useEffect } from "react";
 
 
 
@@ -51,7 +52,13 @@ const tips = [
   }
 ];
 
-function Educate({ userName = "Divine" }) {
+function Educate() {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    setUsername(localStorage.getItem("username") || "User");
+  }, []);
+
   return (
     <div className="min-h-screen flex">
       <Sidebar />
@@ -63,12 +70,8 @@ function Educate({ userName = "Divine" }) {
             <IoMdBook className="text-green-500 font-extrabold" />
 
             SCAM EDUCATION</h1>
-          <div className="flex items-center gap-3">
-            <img
-              alt="User profile"
-              src="img/person.webp"
-              className="w-12 h-12 rounded-full" />
-            <span className="font-bold text-2xl">Hello, {userName}</span>
+          <div className="flex items-center mt-4 md:mt-0">
+            <span className="font-medium text-gray-700 ml-3">Hello, {username}</span>
           </div>
         </header>
 

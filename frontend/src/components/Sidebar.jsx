@@ -7,10 +7,12 @@ import {
   FaMoon,
   FaSun
 } from "react-icons/fa";
+import { FaRightFromBracket } from "react-icons/fa6";
 import { FiUpload } from "react-icons/fi";
 import { IoMdBook } from "react-icons/io";
 import { LuTriangleAlert } from "react-icons/lu";
 import { useNavigate, useLocation } from 'react-router-dom';
+import logout from '../logout';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -159,6 +161,13 @@ export default function Sidebar() {
 
         {/* Settings Section */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => logout(navigate)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 transition-colors mb-2 font-semibold"
+          >
+            <FaRightFromBracket className="text-red-400" />
+            <span>Logout</span>
+          </button>
           <button
             onClick={toggleDarkMode}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

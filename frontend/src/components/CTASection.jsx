@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaCheck } from "react-icons/fa";
+import {Link} from 'react-router-dom';
 
 export function CTASection() {
   const benefits = [
@@ -32,9 +33,11 @@ export function CTASection() {
               ))}
             </ul>
             <div className="flex flex-col sm:flex-row gap-4">
+              <Link to='/login'>
               <button className="bg-white text-[#1A2A3A] hover:bg-[#E5E7EB] px-8 py-3 rounded-md font-medium text-lg transition-colors">
                 Start Free Trial
               </button>
+              </Link>
               <button className="bg-transparent hover:bg-[#3FBAC2] border border-white text-white px-8 py-3 rounded-md font-medium text-lg transition-colors">
                 Schedule Demo
               </button>
