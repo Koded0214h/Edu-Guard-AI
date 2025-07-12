@@ -68,7 +68,7 @@ export default function TextScanner() {
             {/* Description */}
             <View style={{ marginTop: 15 }}>
               <Text style={{ fontSize: 16, color: "#666", fontWeight: 400 }}>
-                Detect scam patterns in scholarship or admission messages
+                Detect scam patterns in scholarship or admission messages.
               </Text>
             </View>
 

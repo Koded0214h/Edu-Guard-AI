@@ -150,6 +150,7 @@ export default function Index() {
                 borderRadius: 10,
                 marginTop: 20,
               }}
+              onPress={() => router.push("/DocumentChecker")}
             >
               <Text
                 style={{
