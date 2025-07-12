@@ -42,7 +42,12 @@ export default function DocumentChecker() {
   // Only allow: PDF, DOCX, JPG, JPEG, PNG
   const openFilePicker = async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: "*/*",
+      type: [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "image/jpeg",
+        "image/png",
+      ],
       copyToCacheDirectory: true,
     });
     if (result.assets && result.assets.length > 0) {
@@ -59,19 +64,28 @@ export default function DocumentChecker() {
 
   const openGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only allow images
       allowsEditing: true,
       quality: 1,
     });
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      setFileInfo({
-        uri: asset.uri,
-        mimeType: asset.mimeType || asset.type || undefined,
-        size: asset.fileSize || 0,
-        name: asset.fileName || asset.uri.split("/").pop() || "image",
-        // Optionally add 'lastModified' if needed
-      });
+      // Only accept jpg, jpeg, png
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      const mimeType = asset.mimeType || asset.type || "";
+      if (allowedTypes.includes(mimeType)) {
+        setFileInfo({
+          uri: asset.uri,
+          mimeType: mimeType,
+          size: asset.fileSize || 0,
+          name: asset.fileName || asset.uri.split("/").pop() || "image",
+        });
+      } else {
+        Alert.alert(
+          "Invalid File",
+          "Only JPG, JPEG, or PNG images are allowed."
+        );
+      }
     }
   };
 
