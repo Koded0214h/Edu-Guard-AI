@@ -7,9 +7,11 @@ import {
 } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const user = { name: "Valentine" }; // replace with actual user state
+  const router = useRouter();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
@@ -92,6 +94,7 @@ export default function Index() {
                 borderRadius: 10,
                 marginTop: 20,
               }}
+              onPress={() => router.push("/TextScanner")}
             >
               <Text
                 style={{
